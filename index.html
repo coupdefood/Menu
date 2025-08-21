@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+    <title>Coup de Food - Menu</title>
+    
+    <!-- DNS Prefetch for external domains -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Preconnect to required origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preload" 
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap&display=optional" 
+          as="style"
+          onload="this.onload=null;this.rel='stylesheet'"
+          data-font-loading="async">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400;500;600&display=swap" 
+            rel="stylesheet">
+    </noscript>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="assets/animations.css">
+    <link rel="manifest" href="assets/manifest.json">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" 
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+</head>
+<body>
+    <!-- Header Fixe -->
+<header class="header">
+  <div class="header-container">
+    <div class="logo-container" id="logo">
+	<!--<h1 class="logo">Coup De Food</h1> -->
+      <img src="assets/images/logo.png" alt="Logo" class="logo" />
+      <!--<p class="slogan">Healthy Food</p>-->
+    </div>
+
+    <nav class="nav-categories" id="navCategories">
+      <!-- Catégories seront ajoutées dynamiquement -->
+    </nav>
+
+    <div class="header-actions">
+      <button id="searchToggle" class="search-toggle" aria-label="Rechercher" aria-expanded="false">
+        <i class="fas fa-search"></i>
+      </button>
+      <button id="themeToggle" class="theme-toggle">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun" style="display: none;"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Overlay de recherche -->
+<div id="searchWrapper" class="search-overlay" aria-hidden="true">
+  <div class="search-panel" role="search" aria-labelledby="searchHelp">
+    <i class="fas fa-search search-icon" aria-hidden="true"></i>
+    <input type="search" id="searchInput" class="search-input" placeholder="Rechercher un plat ou un ingrédient..." autocomplete="off" />
+    <button id="searchClear" class="search-clear" aria-label="Effacer la recherche"><i class="fas fa-times"></i></button>
+    <span class="sr-only" id="searchHelp">Tapez pour filtrer par nom de plat ou ingrédients</span>
+  </div>
+  <button class="search-overlay-close sr-only" aria-label="Fermer la recherche">Fermer</button>
+</div>
+
+    <!-- Modern Carousel -->
+    <div class="modern-carousel" aria-label="Menu Categories">
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+                <!-- Slides will be dynamically inserted here by JavaScript -->
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <button class="carousel-button prev" aria-label="Slide précédent">
+                <span class="sr-only">Précédent</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12l4.58-4.59z"/>
+                </svg>
+            </button>
+            <button class="carousel-button next" aria-label="Slide suivant">
+                <span class="sr-only">Suivant</span>
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6-6-6z"/>
+                </svg>
+            </button>
+            
+            <!-- Pagination Dots -->
+            <div class="carousel-pagination" role="tablist">
+                <!-- Dots will be dynamically inserted here by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Icône de panier flottante -->
+    <div class="floating-cart" id="cartIcon">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+	
+
+    <!-- Contenu Principal -->
+    <main>
+        <!-- Section Accueil (visible par défaut) -->
+        <section class="home-section" id="homeSection">
+            <div class="carousel-container">
+                <div class="carousel-slide" id="carouselSlide">
+                    <!-- Images seront ajoutées dynamiquement -->
+                </div>
+                <button class="carousel-btn prev" id="carouselPrev"><i class="fas fa-chevron-left"></i></button>
+                <button class="carousel-btn next" id="carouselNext"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Section Menu (masquée par défaut) -->
+        <section class="menu-section" id="menuSection" style="display: none;">
+            <h2 class="section-title" id="menuCategoryTitle">Notre Menu</h2>
+            <div class="menu-container" id="menuContainer">
+                <!-- Cartes de plats seront ajoutées dynamiquement -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Panier Flottant -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-content">
+            <div class="cart-header">
+                <h3>Votre Panier</h3>
+                <button class="close-cart">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems">
+                <!-- Articles du panier seront ajoutés dynamiquement -->
+            </div>
+            <div class="cart-summary">
+                <div class="special-request">
+                    <details class="special-request-details">
+                        <summary class="special-request-summary">supplément ou détail:</summary>
+                        <div class="special-request-content">
+                            <textarea id="specialRequest" placeholder="Ajoutez un supplément/instructions spéciales..."></textarea>
+                            <small>Un coût additionnel sera appliqué pour chaque supplément ajouté.</small><!--Supplément facturé en sus."Additional charge applies"."Un coût additionnel sera appliqué pour chaque supplément ajouté."-->
+                        </div>
+                    </details>
+                </div>
+                <div class="total-container">
+                    <span>Sous-total:</span>
+                    <span id="subtotal">0 FCFA</span>
+                </div>
+                <div class="cart-actions">
+                    <button class="btn-clear" id="clearCart">Vider le panier</button>
+                    <button class="btn-checkout" id="checkout">Valider la commande</button>
+                </div>
+                <div class="payment-options" id="paymentOptions" style="display: none;">
+                    <h4>Méthode de paiement</h4>
+                    <button class="btn-payment" id="payOnDelivery">Payer à la livraison</button>
+                    <button class="btn-payment" id="payOnline">Payer en ligne</button>
+                    <div class="online-payment" id="onlinePayment" style="display: none;">
+                        <button class="btn-payment-method" id="orangeMoney">Orange Money</button>
+                        <button class="btn-payment-method" id="wave">Wave</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                  
+
+    <script src="assets/scripts.js"></script>
+
+    <!-- Notification Ajouté au Panier -->
+    <div class="cart-notification" id="cartNotification">
+        <i class="fas fa-check-circle"></i>
+        <span>Ajouté au Panier</span>
+    </div>
+    
+    <!-- Notification de confirmation de vidage du panier -->
+    <div class="clear-cart-confirmation" id="clearCartConfirmation">
+        <div class="confirmation-content">
+            <p>Êtes-vous sûr de vouloir vider votre panier ?</p>
+            <div class="confirmation-buttons">
+                <button class="btn-confirm" onclick="confirmClearCart()">Oui, vider</button>
+                <button class="btn-cancel" onclick="cancelClearCart()">Annuler</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Menu Data -->
+    <script id="menuData" type="application/json">
+    {
+  "categories": [
+    {
+      "name": "Salades",
+      "image": "https://images.unsplash.com/photo-1546793665-c74683f339c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80"
+    },
+    {
+      "name": "Sandwichs",
+      "image": "assets/images/Sandwich.jpg"
+    },
+    {
+      "name": "Bagels",
+      "image": "assets/images/bagel-salmon-fit.jpg"
+    },
+    {
+      "name": "Toasts",
+      "image": "assets/images/Toast-Avocat-oeuf.jpg"
+    },
+    {
+      "name": "Desserts",
+      "image": "assets/images/Dessert-Bagel-Boost-Tella.jpg"
+    },
+    {
+      "name": "Boissons",
+      "image": "assets/images/Dessert-Hero1.jpg"
+    }
+  ],
+  "dishes": [
+  {
+    "id": 12,
+	"category": "Salades",
+    "name": "Goat Boost",
+    "ingredients": "Roquette / Mesclun / Iceberg / Boules de chèvre enrobées de pistache et de graine de chia / Figue séchée / Fraise / Fruit du dragon / Graine de Courge / Granola / Noix de pécan / Pomme",
+    "calories": 425,
+    "proteins": 15,
+    "price": 12500,
+    "image": "assets/images/salad-goat-boost.jpg"
+  },
+  {
+    "id": 13,
+	"category": "Salades",
+    "name": "High Protein",
+    "ingredients": "Iceberg / Epinards / Avocat / Jambon de dinde fumé / Poulet / Halloumi / Canneberge séchée / Concombre / Edamame / Noix de pécan",
+    "calories": 886,
+    "proteins": 45,
+    "price": 13500,
+    "image": "assets/images/salad-high-protein.jpg"
+  },
+  {
+    "id": 14,
+	"category": "Salades",
+    "name": "Tex-Mex",
+    "ingredients": "Effiloché de poulet épicé / Roquette / Mesclun / Iceberg / Avocat / Carotte râpée / Cheddar / Coriandre / Maïs / Jalapeno / Poivron confit / Tortilla chips",
+    "calories": 404,
+    "proteins": 28,
+    "price": 13000,
+    "image": "assets/images/salad-tex-mex.jpg"
+  },
+  {
+    "id": 15,
+	"category": "Salades",
+    "name": "Feta Quinoa",
+    "ingredients": "Quinoa / Roquette / Iceberg / Avocat / Concombre / Menthe / Feta / Grenade / Noix de cajou / Olive noire / Pistache / Tomate cerise",
+    "calories": 531,
+    "proteins": 20,
+    "price": 12000,
+    "image": "assets/images/salad-feta-quinoa.jpg"
+  },
+  {
+    "id": 16,
+	"category": "Salades",
+    "name": "Tuna Pasta",
+    "ingredients": "Pâte fusilli / Thon / Olive noire / Halloumi / Avocat / Mesclun / Maïs / Anchois",
+    "calories": 520,
+    "proteins": 25,
+    "price": 11500,
+    "image": "assets/images/salad-tuna-pasta.jpg"
+  },
+  {
+    "id": 17,
+	"category": "Salades",
+    "name": "Caesar Salade",
+    "ingredients": "Laitue sucrine/iceberg / tomate / Poulet / Croutons healthy / Parmesan",
+    "calories": 350,
+    "proteins": 30,
+    "price": 9000,
+    "image": "assets/images/salad-caesar.jpg"
+  },
+  {
+    "id": 18,
+	"category": "Salades",
+    "name": "Spicy Kani Bowl",
+    "ingredients": "Riz / Kani épicé / Avocat / Concombre / Edamame / Algues / Sauce spéciale",
+    "calories": 480,
+    "proteins": 22,
+    "price": 14000,
+    "image": "assets/images/salad-spicy-kani-bowl.jpg"
+  },
+  {
+    "id": 19,
+	"category": "Salades",
+    "name": "Smoked Salmon Bowl",
+    "ingredients": "Riz / Saumon fumé / Avocat / Concombre / Edamame / Algues / Sauce spéciale",
+    "calories": 480,
+    "proteins": 22,
+    "price": 14000,
+    "image": "assets/images/salad-salmon.jpg"
+  },
+				{
+				"id": 21,
+				"category": "Sandwichs",
+				"name": "Classic Basterma",
+				"ingredients": "Basterma / Copeaux de parmesan / Roquette / Tomate / Sauce blanche light",
+				"calories": 450,
+				"proteins": 25,
+				"price": 8000,
+				"image": "assets/images/sandwich-basterma.jpg"
+				},
+				{
+				"id": 22,
+				"category": "Sandwichs",
+				"name": "Bufala Turkey",
+				"ingredients": "Bufala / Dinde fumée / Roquette / Tomate / Pesto",
+				"calories": 420,
+				"proteins": 28,
+				"price": 7500,
+				"image": "assets/images/sandwich-bufala-turkey.jpg"
+				},
+				{
+				"id": 23,
+				"category": "Sandwichs",
+				"name": "Spicy Chicken",
+				"ingredients": "Effiloché de poulet épicé / Roquette / Guacamole",
+				"calories": 480,
+				"proteins": 32,
+				"price": 7500,
+				"image": "assets/images/sandwich-spicy-chicken.jpg"
+				},
+				{
+				"id": 24,
+				"category": "Sandwichs",
+				"name": "Tuna Jalapeno",
+				"ingredients": "Thon mix / Jalapeno / Laitue",
+				"calories": 380,
+				"proteins": 22,
+				"price": 7000,
+				"image": "assets/images/sandwich-tuna-jalapeno.jpg"
+				},
+				{
+				"id": 25,
+				"category": "Sandwichs",
+				"name": "Halloumi",
+				"ingredients": "Halloumi / Tomate / Concombre / Pesto",
+				"calories": 390,
+				"proteins": 18,
+				"price": 7000,
+				"image": "assets/images/sandwich-halloumi.jpg"
+				},
+				{
+                    "id": 31,
+					"category": "Bagels",
+                    "name": "Le Recovery",
+                    "ingredients": "Poulet / Guacamole onctueux / Emmental / Tomate séchée / Confit d'oignons / Laitue / Moutarde Miel",
+                    "calories": 530,
+                    "proteins": 31.7,
+                    "price": 7500,
+                    "image": "assets/images/bagel-recovery.jpg"
+                },
+                {
+                    "id": 32,
+					"category": "Bagels",
+                    "name": "Le Protéin Duo",
+                    "ingredients": "Bagel protéiné avec double portion de protéines",
+                    "calories": 537,
+                    "proteins": 35.5,
+                    "price": 9000,
+                    "image": "assets/images/bagel-protein.jpg"
+                },
+                {
+                    "id": 33,
+					"category": "Bagels",
+                    "name": "Le Salmon Fit",
+                    "ingredients": "Saumon / Avocat / Câpres / Cream cheese / Roquette",
+                    "calories": 505,
+                    "proteins": 20.2,
+                    "price": 8500,
+                    "image": "assets/images/bagel-salmon-fit.jpg"
+                },
+                {
+                    "id": 34,
+					"category": "Bagels",
+                    "name": "Le Tuna Boost",
+                    "ingredients": "Thon / Avocat / Légumes croquants / Sauce spéciale",
+                    "calories": 408,
+                    "proteins": 17,
+                    "price": 7000,
+                    "image": "assets/images/bagel-Tuna.jpg"
+                },
+                {
+                    "id": 35,
+					"category": "Bagels",
+                    "name": "Le Green Mozza",
+                    "ingredients": "Mozzarella / Pesto / Tomate séchée / Olive noire / Roquette",
+                    "calories": 555,
+                    "proteins": 15.9,
+                    "price": 7500,
+                    "image": "assets/images/bagel-green-mozza.jpg"
+                },
+                {
+                    "id": 36,
+					"category": "Bagels",
+                    "name": "Le Goat Energy",
+                    "ingredients": "Chèvre frais / Pomme / Tomate séchée / Noix de pécan / Miel / Roquette",
+                    "calories": 452,
+                    "proteins": 13.5,
+                    "price": 7000,
+                    "image": "assets/images/bagel-goat-energy.jpg"
+                },
+				                {
+                    "id": 37,
+					"category": "Bagels",
+                    "name": "Le Melty Turkey Bagel",
+                    "ingredients": "Jambon de Dinde fumée / Cheddar / Mozzarella / Emmental / Servi avec de la Guacamole",
+                    "calories": 0,
+                    "proteins": 0,
+                    "price": 6000,
+                    "image": "assets/images/bagel.Melty.jpg"
+                },
+				{
+                    "id": 41,
+                    "category": "Toasts",
+                    "name": "Toast Avocat Œuf Poché",
+                    "ingredients": "Pain de seigle, avocat, œuf poché, graines de sésame, piment d'Espelette",
+                    "calories": 0,
+                    "proteins":0,
+                    "price": 6500,
+                    "image": "assets/images/Toast-Avocat-oeuf.jpg"
+                },
+
+				{
+                    "id": 51,
+					"category": "Desserts",
+                    "name": "Boost-Tella",
+                    "ingredients": "Choco sans Sucre, Banane, Fruits, Granola",
+                    "calories": 236,
+                    "proteins": 24.2,
+                    "price": 7000,
+                    "image": "assets/images/Dessert-Bagel-Boost-Tella.jpg"
+                },
+								{
+                    "id": 52,
+					"category": "Desserts",
+                    "name": "Peanut",
+                    "ingredients": "Beurre de Cacahuette sans Sucre, Fruits, Granola",
+                    "calories": 236,
+                    "proteins": 24.2,
+                    "price": 6000,
+                    "image": "assets/images/Dessert-Peanut.jpg"
+                },
+								{
+                    "id": 53,
+					"category": "Desserts",
+                    "name": "yaourt Granola",
+                    "ingredients": "Yaourt, Fruits, Granola",
+                    "calories": 236,
+                    "proteins": 24.2,
+                    "price": 6000,
+                    "image": "assets/images/Dessert-Yaourt.jpg"
+                },
+								{
+                    "id": 54,
+					"category": "Desserts",
+                    "name": "Brownies Healthy",
+                    "ingredients": " ",
+                    "calories": 236,
+                    "proteins": 24.2,
+                    "price": 3500,
+                    "image": "assets/images/Dessert-Brownies.jpg"
+                },
+  {
+    "id": 60,
+	"category": "Boissons",
+    "name": "Coca-Cola",
+    "type": "Soda Classique",
+    "volume": "33cl",
+    "price": 1000,
+    "image": "assets/images/Boissons-coca.jpg"
+  },
+  {
+    "id": 61,
+	"category": "Boissons",
+    "name": "Coca-Cola Zero",
+    "type": "Soda Sans Sucre",
+    "volume": "33cl",
+    "price": 1000,
+    "image": "assets/images/Boissons-coca-zero.jpg"
+  },
+  {
+    "id": 62,
+	"category": "Boissons",
+    "name": "Fanta",
+    "type": "Soda Fruité (Orange)",
+    "volume": "33cl",
+    "price": 1000,
+    "image": "assets/images/Boissons-fanta.jpg"
+  },
+  {
+    "id": 63,
+	"category": "Boissons",
+    "name": "Sprite",
+    "type": "Soda Citron-Lime",
+    "volume": "33cl",
+    "price": 1000,
+    "image": "assets/images/Boissons-sprite.jpg"
+  },
+  {
+    "id": 64,
+	"category": "Boissons",
+    "name": "Perrier",
+    "type": "Eau gazeuse naturelle",
+    "volume": "33cl",
+    "price": 2000,
+    "image": "assets/images/Boissons-perrier.jpg"
+  },
+  {
+    "id": 65,
+	"category": "Boissons",
+    "name": "Red Bull",
+    "type": "Boisson Énergisante",
+    "volume": "25cl",
+    "price": 2000,
+    "image": "assets/images/Boissons-redbull.jpg"
+  },
+  {
+    "id": 66,
+	"category": "Boissons",
+    "name": "Ice Tea Pêche",
+    "type": "Thé glacé",
+    "volume": "33cl",
+    "price": 2000,
+    "image": "assets/images/Boissons-icetea.jpg"
+  },
+  {
+    "id": 67,
+	"category": "Boissons",
+    "name": "Ice Tea Zéro",
+    "type": "Thé glacé Sans Sucre",
+    "volume": "33cl",
+    "price": 2000,
+    "image": "assets/images/boissons-icetea-zero.jpg"
+  },
+  {
+    "id": 68,
+	"category": "Boissons",
+    "name": "Oasis",
+    "type": "Boisson aux fruits",
+    "volume": "33cl",
+    "price": 2000,
+    "image": "assets/images/Boissons-oasis.jpg"
+  },
+  {
+    "id": 69,
+	"category": "Boissons",
+    "name": "Cody's",
+    "type": "Cocktail sans alcool",
+    "volume": "27.5cl",
+    "price": 1500,
+    "image": "assets/images/Boissons-codys.jpg"
+  },
+  {
+    "id": 70,
+	"category": "Boissons",
+    "name": "Bavaria 0%",
+    "type": "Bière sans alcool",
+    "volume": "33cl",
+    "price": 2000,
+    "image": "assets/images/Boissons-bavaria-pomme.jpeg"
+  },
+  {
+    "id": 71,
+	"category": "Boissons",
+    "name": "Schweppes Agrumes",
+    "type": "Boisson pétillante",
+    "volume": "33cl",
+    "price": 1000,
+    "image": "assets/images/Boissons-schweppes.jpg"
+  }
+  ]
+}
+
+    </script>
+<!-- Pied de page -->
+<footer class="footer">
+    <div class="footer-content">
+        <!-- Section Contact -->
+        <div class="footer-section">
+            <h3>Contact</h3>
+            <div class="contact-info">
+                <p><i class="fas fa-phone"></i> <a href="tel:+2250708305100">07 08 30 51 00</a></p>
+                <p><i class="fas fa-map-marker-alt"></i> Rue Angeline Nadie <a href="https://www.google.com/maps?q=5.2979405,-3.988237" target="_blank" class="map-link"><i class="fas fa-map-marked-alt"></i></a></p>
+                <p><i class="far fa-clock"></i> Mar-Dim: 11h-23h</p>
+            </div>
+        </div>
+
+        <!-- Section À propos -->
+        <div class="footer-section">
+            <h3>À propos</h3>
+            <p>Découvrez notre univers culinaire sain et savoureux. En partenariat avec <a href="https://wa.me/2250574091334" target="_blank" class="nutrition-link">Nutrition Santé <i class="fab fa-whatsapp"></i></a>.</p>
+            <a href="a-propos.html" class="about-link">En savoir plus <i class="fas fa-external-link-alt"></i></a>
+        </div>
+
+        <!-- Section Réseaux sociaux -->
+        <div class="footer-section social-section">
+            <h3>Suivez-nous</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/coupdefood.healthy" target="_blank" class="social-icon" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" class="social-icon disabled" title="Bientôt sur TikTok">
+                    <i class="fab fa-tiktok"></i>
+                </a>
+                <a href="https://wa.me/2250708305100" target="_blank" class="social-icon whatsapp" title="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="footer-bottom">
+        <p>&copy; 2025 Coup De Food. Tous droits réservés.</p>
+    </div>
+</footer>
+
+<!-- Modale À propos -->
+<div id="aboutModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="aboutModalTitle" aria-hidden="true">
+    <div class="modal-content">
+        <button type="button" class="close-modal" aria-label="Fermer la fenêtre">&times;</button>
+        <div class="about-modal-content">
+            <h1 id="aboutModalTitle">✨ Notre Histoire</h1>
+            <p><strong>Coup De Food</strong>, c'est l'histoire d'un coup de cœur entre la <em>gastronomie</em> et le <em>bien-être</em>. Un lieu où chaque bouchée raconte une vision : celle d'une cuisine saine, gourmande et sans compromis. — une véritable expérience culinaire saine et savoureuse, pensée pour ceux qui veulent se faire plaisir tout en prenant soin de leur santé.</p>
+
+            <h2>🌱 Une philosophie qui nourrit le corps et l'esprit</h2>
+            <p>Chez nous, manger sain n'est pas une tendance — c'est une conviction profonde. Nous croyons que manger sain ne doit jamais être synonyme de privation et que la santé commence dans l'assiette, mais qu'elle ne doit jamais sacrifier le plaisir du goût.</p>
+            <p>Nos recettes sont 100% Healthy, élaborées à partir d'ingrédients nobles, frais et naturels. Chaque plat est conçu avec passion et pensé pour garantir un équilibre parfait entre plaisir et valeur nutritionnelle. Nous avons à cœur de prouver que l'excellence culinaire peut rimer avec santé.</p>
+
+            <h2>🧬 L'excellence, sans artifices</h2>
+            <p>Chez Coup De Food, l'excellence ne se cache pas derrière des artifices. Elle se révèle dans la simplicité d'un légume croquant, dans la justesse d'un assaisonnement, dans l'harmonie d'un plat qui fait du bien.</p>
+
+            <h2>🤝 Une alliance entre science et saveur</h2>
+            <p>Notre partenariat avec le cabinet diététique <a href="https://wa.me/2250574091334" target="_blank" class="nutrition-link">Nutrition Santé <i class="fab fa-whatsapp"></i></a> est au cœur de notre démarche afin de vous proposer une carte qui allie expertise diététique et authenticité des saveurs. Nos plats créés respectent vos besoins nutritionnels tout en préservant l'émotion culinaire.</p>
+
+            <h2>🔥 Une cuisine vivante, audacieuse, inspirée</h2>
+            <p>Nos chefs ne suivent pas les tendances — ils les réinventent. Ils mettent un point d'honneur à créer des plats innovants, en utilisant des techniques de préparation saines et des ingrédients nobles, pour vous offrir une carte vivante, qui évolue au rythme des saisons et des inspirations. Chaque assiette reflète notre passion pour une alimentation équilibrée, où le goût, la qualité et la santé se rencontrent dans une harmonie parfaite.</p>
+
+            <h2>🍽️ Bienvenue dans l'univers Coup De Food</h2>
+            <p>Plus qu'un restaurant, nous sommes un manifeste culinaire. Une invitation à repenser votre rapport à l'alimentation, à vous faire du bien sans renoncer au plaisir, à vivre chaque repas comme un acte de soin.</p>
+            <p><strong>Coup De Food</strong>, c'est vous. C'est votre corps, votre énergie, votre envie de mieux — avec du goût.</p>
+            
+            <div class="signature">
+                <p>L'équipe Coup De Food</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+ 
+
+<script>
+// Gestion accessible de la modale "À propos"
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = document.getElementById('aboutModal');
+  const modalContent = modal.querySelector('.modal-content');
+  const closeBtn = modal.querySelector('.close-modal');
+  const aboutLinks = document.querySelectorAll('.about-link, a[href="a-propos.html"]');
+
+  let lastFocusedElement = null;
+  let scrollPosition = 0;
+
+  const focusableSelectors = [
+    'a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])',
+    'textarea:not([disabled])', 'button:not([disabled])', 'iframe', 'object',
+    'embed', '[contenteditable]', '[tabindex]:not([tabindex="-1"])'
+  ];
+
+  function getFocusable() {
+    return Array.from(modalContent.querySelectorAll(focusableSelectors.join(',')))
+      .filter(el => el.offsetParent !== null);
+  }
+
+  function lockScroll() {
+    scrollPosition = window.scrollY || document.documentElement.scrollTop || 0;
+    document.body.style.top = `-${scrollPosition}px`;
+    document.body.style.position = 'fixed';
+    document.body.style.width = '100%';
+  }
+
+  function unlockScroll() {
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollPosition);
+  }
+
+  function openModal(event) {
+    // Préserver ouverture externe: seulement empêcher le clic gauche sans modifieurs
+    const isModified = event.ctrlKey || event.metaKey || event.shiftKey || event.altKey;
+    const isMiddle = event.button === 1;
+    const isLeft = (event.button === 0 || event.button === undefined);
+    if (!isLeft || isModified || isMiddle) return; // laisser ouverture normale
+    event.preventDefault();
+
+    lastFocusedElement = document.activeElement;
+    lockScroll();
+    modal.classList.remove('hiding');
+    modal.classList.add('show');
+    modal.setAttribute('aria-hidden', 'false');
+
+    const focusables = getFocusable();
+    const toFocus = closeBtn || focusables[0];
+    if (toFocus) toFocus.focus();
+
+    document.addEventListener('keydown', onKeydown);
+  }
+
+  function closeModal() {
+    modal.classList.add('hiding');
+    modal.setAttribute('aria-hidden', 'true');
+
+    // attendre fin d'anim pour débloquer le scroll (~300ms)
+    setTimeout(() => {
+      modal.classList.remove('show', 'hiding');
+      unlockScroll();
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+    }, 320);
+
+    document.removeEventListener('keydown', onKeydown);
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      closeModal();
+      return;
+    }
+    if (e.key === 'Tab') {
+      const focusables = getFocusable();
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first || !modal.contains(document.activeElement)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  }
+
+  // Ouverture sur liens À propos
+  aboutLinks.forEach(link => {
+    link.addEventListener('click', openModal);
+  });
+
+  // Fermeture bouton
+  closeBtn.addEventListener('click', closeModal);
+
+  // Fermeture clic sur l'overlay
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) closeModal();
+  });
+});
+</script>
+
+    <!-- SheetJS for Excel import/export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    
+    <!-- Font Loading Optimization -->
+    <script>
+    (function() {
+        // Add loading class immediately
+        document.documentElement.classList.add('fonts-loading');
+        
+        // Function to handle font loading completion
+        function handleFontsLoaded() {
+            document.documentElement.classList.remove('fonts-loading');
+            document.documentElement.classList.add('fonts-loaded');
+            
+            // If we have a font loading element, remove the loading class
+            const fontLoadingElement = document.querySelector('[data-font-loading]');
+            if (fontLoadingElement) {
+                fontLoadingElement.classList.remove('font-loading');
+            }
+        }
+        
+        try {
+            // Use Font Loading API if available
+            if ('fonts' in document) {
+                // Wait for all fonts to load
+                document.fonts.ready.then(handleFontsLoaded).catch(function(e) {
+                    console.warn('Font loading warning:', e);
+                    handleFontsLoaded(); // Fallback if there's an error
+                });
+                
+                // Fallback in case the ready event doesn't fire
+                setTimeout(handleFontsLoaded, 3000);
+            } else {
+                // Fallback for browsers without Font Loading API
+                setTimeout(handleFontsLoaded, 100);
+            }
+        } catch (e) {
+            console.warn('Font loading error:', e);
+            handleFontsLoaded(); // Ensure we always remove loading state
+        }
+    })();
+    </script>
+
+    <!-- Admin Modal -->
+    <style>
+      /* Minimal styles for admin modal; consider moving to assets/styles.css */
+      #adminModal { display: none; position: fixed; inset: 0; z-index: 10000; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+      #adminModal.show { display: flex; opacity: 1; visibility: visible; }
+      #adminModal .admin-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,.45); backdrop-filter: blur(4px); }
+      #adminModal .admin-window { position: relative; width: min(1100px, 96vw); max-height: 92vh; background: var(--card, #fff); color: var(--text, #222); border-radius: 16px; box-shadow: 0 24px 60px rgba(0,0,0,.4); overflow: hidden; display: flex; flex-direction: column; }
+      #adminModal header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border, #eee); }
+      #adminModal .tabs { display: flex; gap: 8px; }
+      #adminModal .tab-btn { padding: 8px 12px; border-radius: 8px; background: transparent; border: 1px solid var(--border, #e5e5e5); font-weight: 600; }
+      #adminModal .tab-btn.active { background: var(--accent, #d4af37); color: #111; border-color: var(--accent, #d4af37); }
+      #adminModal .panel { padding: 16px; overflow-y: auto; max-height: calc(92vh - 60px); flex: 1; }
+      #adminModal .toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; position: sticky; top: 0; background: var(--card, #fff); z-index: 10; padding: 12px 16px; margin: -16px -16px 12px -16px; border-bottom: 1px solid var(--border, #eee); }
+      #adminModal .toolbar .btn-danger { background: var(--danger, #f44336); color: #fff; }
+      #adminModal .toolbar .btn-secondary { background: #e9ecef; }
+      #adminModal .toolbar .btn-primary { background: var(--accent, #d4af37); color: #111; }
+      #adminModal .btn-close-admin { background: transparent; border: none; font-size: 18px; cursor: pointer; }
+      #adminLock { padding: 28px; text-align: center; }
+      #adminLock .code-input { font-size: 24px; padding: 8px 12px; width: 160px; letter-spacing: 6px; text-align: center; }
+      #adminError { display: none; color: var(--danger, #f44336); margin-top: 8px; }
+      #dishFormContainer { display: none; border: 1px solid var(--border, #eee); padding: 12px; border-radius: 8px; margin-bottom: 12px; }
+      #adminDishList .admin-dish-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 8px; border-bottom: 1px dashed var(--border, #eee); }
+      #adminDishList .admin-dish-item .actions { display: flex; gap: 8px; }
+      #topDishesList, #topCategoriesList { list-style: none; padding: 0; margin: 0; }
+      #topDishesList li, #topCategoriesList li { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--border, #eee); }
+      .badge { background: var(--accent, #d4af37); color: #111; border-radius: 999px; padding: 2px 8px; font-size: 12px; }
+      .muted { color: #777; font-size: 12px; }
+      .price { font-weight: 600; }
+      .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+    <div id="adminModal" aria-hidden="true">
+      <div class="admin-backdrop"></div>
+      <div class="admin-window" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+        <header>
+          <div class="tabs" role="tablist">
+            <button class="tab-btn active" role="tab" aria-selected="true" data-tab="menu">Menu</button>
+            <button class="tab-btn" role="tab" aria-selected="false" data-tab="stats">Statistiques</button>
+          </div>
+          <button id="closeAdminModal" class="btn-close-admin" aria-label="Fermer">✕</button>
+        </header>
+
+        <!-- Lock screen -->
+        <div id="adminLock">
+          <h3 id="adminTitle">Accès administrateur</h3>
+          <p>Entrez le code pour déverrouiller</p>
+          <input id="adminCode" class="code-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" aria-label="Code d'accès" />
+          <div>
+            <button id="adminUnlock" class="btn-primary" style="margin-top:10px; padding:8px 14px; border-radius:8px;">Déverrouiller</button>
+          </div>
+          <div id="adminError">Code incorrect</div>
+        </div>
+
+        <!-- Content -->
+        <div id="adminContent" style="display:none;">
+          <!-- Panel: Menu -->
+          <section id="adminPanelMenu" class="panel" style="display:block;">
+            <div class="toolbar">
+              <select id="adminCategoryFilter" title="Filtrer par catégorie"></select>
+              <button id="btnAddDish" class="btn-primary">Ajouter un plat</button>
+              <button id="btnImport" class="btn-secondary">Importer (Excel)</button>
+              <input id="excelImport" type="file" accept=".xlsx,.xls" style="display:none;" />
+              <button id="btnExport" class="btn-secondary">Exporter (Excel)</button>
+              <button id="btnResetMenu" class="btn-danger">Réinitialiser</button>
+            </div>
+
+            <div id="dishFormContainer">
+              <div class="grid">
+                <input type="hidden" id="dishId" />
+                <div>
+                  <label>Catégorie</label>
+                  <input id="dishCategory" type="text" placeholder="ex: Salades" />
+                </div>
+                <div>
+                  <label>Nom</label>
+                  <input id="dishName" type="text" placeholder="Nom du plat" />
+                </div>
+                <div>
+                  <label>Ingrédients</label>
+                  <textarea id="dishIngredients" placeholder="Liste des ingrédients"></textarea>
+                </div>
+                <div>
+                  <label>Calories</label>
+                  <input id="dishCalories" type="number" min="0" step="1" placeholder="kcal" />
+                </div>
+                <div>
+                  <label>Protéines (g)</label>
+                  <input id="dishProteins" type="number" min="0" step="1" placeholder="g" />
+                </div>
+                <div>
+                  <label>Prix (FCFA)</label>
+                  <input id="dishPrice" type="number" min="0" step="100" placeholder="FCFA" />
+                </div>
+                <div>
+                  <label>Image (URL)</label>
+                  <input id="dishImageUrl" type="url" placeholder="https://... ou laissé vide si fichier" />
+                </div>
+                <div>
+                  <label>Image (Fichier local)</label>
+                  <input id="dishImageFile" type="file" accept="image/*" />
+                </div>
+              </div>
+              <div style="margin-top:10px; display:flex; gap:8px;">
+                <button id="saveDish" class="btn-primary">Enregistrer</button>
+                <button id="cancelEdit" class="btn-secondary">Annuler</button>
+              </div>
+            </div>
+
+            <div id="adminDishList"></div>
+          </section>
+
+          <!-- Panel: Stats -->
+          <section id="adminPanelStats" class="panel" style="display:none;">
+            <h3>Plats les plus commandés</h3>
+            <ul id="topDishesList"></ul>
+            <h3 style="margin-top:16px;">Catégories les plus commandées</h3>
+            <ul id="topCategoriesList"></ul>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Functionality -->
+    <script src="assets/search.js"></script>
+</body>
+</html>
