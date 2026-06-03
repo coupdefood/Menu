@@ -5,13 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
-    <title>Coup de Food - Menu</title>
-    
+    <title>Coup De Food — Restaurant Healthy Abidjan | Menu &amp; Livraison</title>
+
+    <!-- SEO -->
+    <meta name="description" content="Coup De Food, restaurant healthy à Abidjan : salades, bagels, sandwichs, toasts et desserts gourmands &amp; équilibrés. Commandez en ligne via WhatsApp.">
+    <meta name="keywords" content="restaurant healthy Abidjan, salade, bagel, sandwich, toast, dessert, livraison, Coup De Food">
+    <meta name="author" content="Coup De Food">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://coupdefood.github.io/Menu/">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="restaurant">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:site_name" content="Coup De Food">
+    <meta property="og:title" content="Coup De Food — Restaurant Healthy Abidjan">
+    <meta property="og:description" content="Une cuisine saine, gourmande et sans compromis. Découvrez notre menu et commandez en ligne.">
+    <meta property="og:url" content="https://coupdefood.github.io/Menu/">
+    <meta property="og:image" content="https://coupdefood.github.io/Menu/assets/images/Cover.webp">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Coup De Food — Restaurant Healthy Abidjan">
+    <meta name="twitter:description" content="Une cuisine saine, gourmande et sans compromis. Menu &amp; commande en ligne.">
+    <meta name="twitter:image" content="https://coupdefood.github.io/Menu/assets/images/Cover.webp">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo.webp">
+    <link rel="apple-touch-icon" href="assets/images/logo.webp">
+
     <!-- DNS Prefetch for external domains -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    
+
     <!-- Preconnect to required origins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,28 +63,71 @@
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
+
+    <!-- Données structurées Schema.org : Restaurant + Menu -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Coup De Food",
+      "description": "Restaurant healthy à Abidjan proposant salades, bagels, sandwichs, toasts et desserts gourmands & équilibrés.",
+      "url": "https://coupdefood.github.io/Menu/",
+      "image": "https://coupdefood.github.io/Menu/assets/images/Cover.webp",
+      "logo": "https://coupdefood.github.io/Menu/assets/images/logo.webp",
+      "telephone": "+2250708305100",
+      "servesCuisine": ["Healthy", "Méditerranéenne", "Internationale"],
+      "priceRange": "$$",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Rue Angeline Nadie",
+        "addressLocality": "Abidjan",
+        "addressCountry": "CI"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 5.2979405,
+        "longitude": -3.988237
+      },
+      "openingHoursSpecification": [{
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "11:00",
+        "closes": "23:00"
+      }],
+      "sameAs": [
+        "https://www.instagram.com/coupdefood.healthy",
+        "https://www.tiktok.com/@coup_de_food0"
+      ]
+    }
+    </script>
 </head>
 <body>
+    <!-- Titre principal pour SEO/lecteurs d'écran -->
+    <h1 class="sr-only">Coup De Food — Restaurant Healthy à Abidjan</h1>
+
     <!-- Header Fixe -->
 <header class="header">
   <div class="header-container">
-    <div class="logo-container" id="logo">
+    <div class="logo-container" id="logo" role="button" tabindex="0" aria-label="Retour à l'accueil">
 	<!--<h1 class="logo">Coup De Food</h1> -->
-      <img src="assets/images/logo.png" alt="Logo" class="logo" />
+      <img src="assets/images/logo.webp" alt="Coup De Food" class="logo" width="160" height="48" />
       <!--<p class="slogan">Healthy Food</p>-->
     </div>
 
-    <nav class="nav-categories" id="navCategories">
+    <nav class="nav-categories" id="navCategories" aria-label="Catégories du menu">
       <!-- Catégories seront ajoutées dynamiquement -->
     </nav>
 
     <div class="header-actions">
       <button id="searchToggle" class="search-toggle" aria-label="Rechercher" aria-expanded="false">
-        <i class="fas fa-search"></i>
+        <i class="fas fa-search" aria-hidden="true"></i>
       </button>
-      <button id="themeToggle" class="theme-toggle">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun" style="display: none;"></i>
+      <button id="shareToggle" class="share-toggle" aria-label="Partager le menu">
+        <i class="fas fa-share-alt" aria-hidden="true"></i>
+      </button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Basculer le thème clair/sombre" aria-pressed="false">
+        <i class="fas fa-moon" aria-hidden="true"></i>
+        <i class="fas fa-sun" aria-hidden="true" style="display: none;"></i>
       </button>
     </div>
   </div>
@@ -70,7 +139,7 @@
     <i class="fas fa-search search-icon" aria-hidden="true"></i>
     <input type="search" id="searchInput" class="search-input" placeholder="Rechercher un plat ou un ingrédient..." autocomplete="off" />
     <button id="searchClear" class="search-clear" aria-label="Effacer la recherche"><i class="fas fa-times"></i></button>
-    <span class="sr-only" id="searchHelp">Tapez pour filtrer par nom de plat ou ingrédients</span>
+    <span class="sr-only" id="searchHelp">Recherche par plat ou ingrédients</span>
   </div>
   <button class="search-overlay-close sr-only" aria-label="Fermer la recherche">Fermer</button>
 </div>
@@ -104,10 +173,10 @@
     </div>
 
     <!-- Icône de panier flottante -->
-    <div class="floating-cart" id="cartIcon">
-        <i class="fas fa-shopping-cart"></i>
-        <span class="cart-count" id="cartCount">0</span>
-    </div>
+    <button class="floating-cart" id="cartIcon" type="button" aria-label="Voir le panier">
+        <i class="fas fa-shopping-cart" aria-hidden="true"></i>
+        <span class="cart-count" id="cartCount" aria-live="polite" aria-label="Articles dans le panier">0</span>
+    </button>
 	
 
     <!-- Contenu Principal -->
@@ -181,6 +250,12 @@
         <i class="fas fa-check-circle"></i>
         <span>Ajouté au Panier</span>
     </div>
+
+    <!-- Notification générique (partage, copie, etc.) -->
+    <div class="toast-notification" id="toastNotification" role="status" aria-live="polite">
+        <i class="fas fa-check-circle" aria-hidden="true"></i>
+        <span id="toastNotificationText">Lien copié !</span>
+    </div>
     
     <!-- Notification de confirmation de vidage du panier -->
     <div class="clear-cart-confirmation" id="clearCartConfirmation">
@@ -203,23 +278,23 @@
     },
     {
       "name": "Sandwichs",
-      "image": "assets/images/Sandwich.jpg"
+      "image": "assets/images/sandwich.webp"
     },
     {
       "name": "Bagels",
-      "image": "assets/images/bagel-salmon-fit.jpg"
+      "image": "assets/images/bagel-salmon-fit.webp"
     },
     {
       "name": "Toasts",
-      "image": "assets/images/Toast-Avocat-oeuf.jpg"
+      "image": "assets/images/Toast-Avocat-oeuf.webp"
     },
     {
       "name": "Desserts",
-      "image": "assets/images/Dessert-Bagel-Boost-Tella.jpg"
+      "image": "assets/images/Dessert-Bagel-Boost-Tella.webp"
     },
     {
       "name": "Boissons",
-      "image": "assets/images/Dessert-Hero1.jpg"
+      "image": "assets/images/Dessert-Hero1.webp"
     }
   ],
   "dishes": [
@@ -231,7 +306,7 @@
     "calories": 425,
     "proteins": 15,
     "price": 12500,
-    "image": "assets/images/salad-goat-boost.jpg"
+    "image": "assets/images/salad-goat-boost.webp"
   },
   {
     "id": 13,
@@ -241,7 +316,7 @@
     "calories": 886,
     "proteins": 45,
     "price": 13500,
-    "image": "assets/images/salad-high-protein.jpg"
+    "image": "assets/images/salad-high-protein.webp"
   },
   {
     "id": 14,
@@ -251,7 +326,7 @@
     "calories": 404,
     "proteins": 28,
     "price": 13000,
-    "image": "assets/images/salad-tex-mex.jpg"
+    "image": "assets/images/salad-tex-mex.webp"
   },
   {
     "id": 15,
@@ -261,7 +336,7 @@
     "calories": 531,
     "proteins": 20,
     "price": 12000,
-    "image": "assets/images/salad-feta-quinoa.jpg"
+    "image": "assets/images/salad-feta-quinoa.webp"
   },
   {
     "id": 16,
@@ -271,316 +346,433 @@
     "calories": 520,
     "proteins": 25,
     "price": 11500,
-    "image": "assets/images/salad-tuna-pasta.jpg"
+    "image": "assets/images/Salad-Tuna-Pasta.webp"
   },
   {
     "id": 17,
 	"category": "Salades",
-    "name": "Caesar Salade",
+    "name": "Caesar Chicken",
     "ingredients": "Laitue sucrine/iceberg / tomate / Poulet / Croutons healthy / Parmesan",
     "calories": 350,
     "proteins": 30,
     "price": 9000,
-    "image": "assets/images/salad-caesar.jpg"
+    "image": "assets/images/salad-caesar.webp"
   },
   {
     "id": 18,
 	"category": "Salades",
-    "name": "Spicy Kani Bowl",
-    "ingredients": "Riz / Kani épicé / Avocat / Concombre / Edamame / Algues / Sauce spéciale",
-    "calories": 480,
-    "proteins": 22,
-    "price": 14000,
-    "image": "assets/images/salad-spicy-kani-bowl.jpg"
-  },
-  {
+    "name": "Burrata Verde",
+    "ingredients": "Iceberg / Roquette / Tomate cerise / Graine de courge / Burrata / Pesto / Pomme / Crème de vinaigre balsamique",
+    "calories": 517,
+    "proteins": 18,
+    "price": 12500,
+    "image": "assets/images/Salad-Burrata-verde.webp"
+  },  {
     "id": 19,
 	"category": "Salades",
-    "name": "Smoked Salmon Bowl",
-    "ingredients": "Riz / Saumon fumé / Avocat / Concombre / Edamame / Algues / Sauce spéciale",
+    "name": "Niçoise Salad",
+    "ingredients": "Iceberg / Haricot vert / Tomate cerise / Carotte râpée / Olive noire / Oeuf / Thon / Anchois Dressing : Light honey mustard sauce",
+    "calories": 368,
+    "proteins": 26,
+    "price": 8000,
+    "image": "assets/images/Salad-Burrata-verde.webp"
+  },
+  {
+    "id": 20,
+	"category": "Salades",
+    "name": "Spicy Kani Bowl",
+    "ingredients": "Kani épicé / Riz sushi vinaigré / Carotte / Concombre / Fraises / Avocat / Edamame / Mangue / Noix de cajou / Sauce spéciale",
     "calories": 480,
     "proteins": 22,
     "price": 14000,
-    "image": "assets/images/salad-salmon.jpg"
+    "image": "assets/images/salad-spicy-kani-bowl.webp"
+  },
+  {
+    "id": 21,
+	"category": "Salades",
+    "name": "Smoked Salmon Bowl",
+    "ingredients": "Saumon fumé / Riz sushi vinaigré / Carotte / Concombre / Fraises / Avocat / Edamame / Mangue / Noix de cajou / Sauce spéciale",
+    "calories": 560,
+    "proteins": 27.1,
+    "price": 14000,
+    "image": "assets/images/salad-salmon.webp"
+  },
+  {
+    "id": 22,
+	"category": "Salades",
+    "name": "Chicken Poke Bowl",
+    "ingredients": "Poulet / Riz sushi vinaigré / Carotte / Concombre / Fraises / Avocat / Edamame / Mangue / Noix de cajou / Sauce spéciale",
+    "calories": 606,
+    "proteins": 30.7,
+    "price": 14000,
+    "image": "assets/images/salad-salmon.webp"
+  },
+  {
+    "id": 23,
+	"category": "Salades",
+    "name": "Beef Poke Bowl",
+    "ingredients": "Filet de boeuf / Riz sushi vinaigré / Carotte / Concombre / Fraises / Avocat / Edamame / Mangue / Noix de cajou / Sauce spéciale",
+    "calories": 644,
+    "proteins": 26.2,
+    "price": 14000,
+    "image": "assets/images/salad-salmon.webp"
+  },
+  {
+    "id": 24,
+	"category": "Salades",
+    "name": "La Caesar Signature",
+    "ingredients": "Iceberg / Sucrine / Tomate cerise / Champignons frais / Croûtons de pains complet / Avocat / Halloum grillé / Effiloché de poulet / Parmesan Dressing : Light caeser sauce",
+    "calories": 0,
+    "proteins": 0,
+    "price": 11500,
+    "image": "assets/images/salad-salmon.webp"
+  },
+  {
+    "id": 25,
+	"category": "Salades",
+    "name": "Pasta Perla",
+    "ingredients": "Mozzarella billes / Tomates cerises / Câpres / Olives noires / Basilic / Crème de vinaigre balsamique / Roquette / Pates torti Dressing : Light balsamic sauce",
+    "calories": 0,
+    "proteins": 0,
+    "price": 11000,
+    "image": "assets/images/salad-salmon.webp"
   },
 				{
-				"id": 21,
+				"id": 31,
 				"category": "Sandwichs",
 				"name": "Classic Basterma",
 				"ingredients": "Basterma / Copeaux de parmesan / Roquette / Tomate / Sauce blanche light",
 				"calories": 450,
 				"proteins": 25,
 				"price": 8000,
-				"image": "assets/images/sandwich-basterma.jpg"
+				"image": "assets/images/sandwich-basterma.webp"
 				},
 				{
-				"id": 22,
+				"id": 32,
 				"category": "Sandwichs",
 				"name": "Bufala Turkey",
 				"ingredients": "Bufala / Dinde fumée / Roquette / Tomate / Pesto",
 				"calories": 420,
 				"proteins": 28,
 				"price": 7500,
-				"image": "assets/images/sandwich-bufala-turkey.jpg"
+				"image": "assets/images/sandwich-bufala-turkey.webp"
 				},
 				{
-				"id": 23,
+				"id": 33,
 				"category": "Sandwichs",
 				"name": "Spicy Chicken",
 				"ingredients": "Effiloché de poulet épicé / Roquette / Guacamole",
 				"calories": 480,
 				"proteins": 32,
 				"price": 7500,
-				"image": "assets/images/sandwich-spicy-chicken.jpg"
+				"image": "assets/images/sandwich-spicy-chicken.webp"
 				},
 				{
-				"id": 24,
+				"id": 34,
 				"category": "Sandwichs",
 				"name": "Tuna Jalapeno",
 				"ingredients": "Thon mix / Jalapeno / Laitue",
 				"calories": 380,
 				"proteins": 22,
 				"price": 7000,
-				"image": "assets/images/sandwich-tuna-jalapeno.jpg"
+				"image": "assets/images/sandwich-tuna-jalapeno.webp"
 				},
 				{
-				"id": 25,
+				"id": 35,
 				"category": "Sandwichs",
 				"name": "Halloumi",
 				"ingredients": "Halloumi / Tomate / Concombre / Pesto",
 				"calories": 390,
 				"proteins": 18,
 				"price": 7000,
-				"image": "assets/images/sandwich-halloumi.jpg"
+				"image": "assets/images/sandwich-halloumi.webp"
 				},
 				{
-                    "id": 31,
+				"id": 36,
+				"category": "Sandwichs",
+				"name": "Burrata Caprese",
+				"ingredients": "Burrata / Tomate / Roquette / Pesto",
+				"calories": 0,
+				"proteins": 0,
+				"price": 9000,
+				"image": "assets/images/sandwich-burrata-caprese.webp"
+				},				
+				{
+				"id": 37,
+				"category": "Sandwichs",
+				"name": "Steak Forest",
+				"ingredients": "Filet de boeuf / Oignons / Champignons frais / Emmental / Roquette / Pain Ciabatta Santé",
+				"calories": 0,
+				"proteins": 0,
+				"price": 9000,
+				"image": "assets/images/sandwich-steak-forest.webp"
+				},	
+				"id": 38,
+				"category": "Sandwichs",
+				"name": "Chicken Sub Healthy",
+				"ingredients": ".../ Pain Ciabatta Santé",
+				"calories": 0,
+				"proteins": 0,
+				"price": 0000,
+				"image": "assets/images/sandwich-steak-forest.webp"
+				},	
+				"id": 39,
+				"category": "Sandwichs",
+				"name": "...NEW...",
+				"ingredients": "Filet de boeuf / Oignons / Champignons frais / Emmental / Roquette / Pain Ciabatta Santé",
+				"calories": 0,
+				"proteins": 0,
+				"price": 0000,
+				"image": "assets/images/sandwich-steak-forest.webp"
+				},					
+				{
+                    "id": 41,
 					"category": "Bagels",
                     "name": "Le Recovery",
                     "ingredients": "Poulet / Guacamole onctueux / Emmental / Tomate séchée / Confit d'oignons / Laitue / Moutarde Miel",
                     "calories": 530,
                     "proteins": 31.7,
                     "price": 7500,
-                    "image": "assets/images/bagel-recovery.jpg"
+                    "image": "assets/images/bagel-recovery.webp"
                 },
                 {
-                    "id": 32,
+                    "id": 42,
 					"category": "Bagels",
                     "name": "Le Protéin Duo",
                     "ingredients": "Bagel protéiné avec double portion de protéines",
                     "calories": 537,
                     "proteins": 35.5,
                     "price": 9000,
-                    "image": "assets/images/bagel-protein.jpg"
+                    "image": "assets/images/bagel-protein.webp"
                 },
                 {
-                    "id": 33,
+                    "id": 43,
 					"category": "Bagels",
                     "name": "Le Salmon Fit",
                     "ingredients": "Saumon / Avocat / Câpres / Cream cheese / Roquette",
                     "calories": 505,
                     "proteins": 20.2,
                     "price": 8500,
-                    "image": "assets/images/bagel-salmon-fit.jpg"
+                    "image": "assets/images/bagel-salmon-fit.webp"
                 },
                 {
-                    "id": 34,
+                    "id": 44,
 					"category": "Bagels",
                     "name": "Le Tuna Boost",
                     "ingredients": "Thon / Avocat / Légumes croquants / Sauce spéciale",
                     "calories": 408,
                     "proteins": 17,
                     "price": 7000,
-                    "image": "assets/images/bagel-Tuna.jpg"
+                    "image": "assets/images/bagel-Tuna.webp"
                 },
                 {
-                    "id": 35,
+                    "id": 45,
 					"category": "Bagels",
                     "name": "Le Green Mozza",
                     "ingredients": "Mozzarella / Pesto / Tomate séchée / Olive noire / Roquette",
                     "calories": 555,
                     "proteins": 15.9,
                     "price": 7500,
-                    "image": "assets/images/bagel-green-mozza.jpg"
+                    "image": "assets/images/bagel-green-mozza.webp"
                 },
                 {
-                    "id": 36,
+                    "id": 46,
 					"category": "Bagels",
                     "name": "Le Goat Energy",
                     "ingredients": "Chèvre frais / Pomme / Tomate séchée / Noix de pécan / Miel / Roquette",
                     "calories": 452,
                     "proteins": 13.5,
                     "price": 7000,
-                    "image": "assets/images/bagel-goat-energy.jpg"
+                    "image": "assets/images/bagel-goat-energy.webp"
                 },
-				                {
-                    "id": 37,
+				{
+                    "id": 47,
 					"category": "Bagels",
                     "name": "Le Melty Turkey Bagel",
                     "ingredients": "Jambon de Dinde fumée / Cheddar / Mozzarella / Emmental / Servi avec de la Guacamole",
                     "calories": 0,
                     "proteins": 0,
                     "price": 6000,
-                    "image": "assets/images/bagel.Melty.jpg"
+                    "image": "assets/images/bagel.Melty.webp"
                 },
 				{
-                    "id": 41,
+                    "id": 48,
+					"category": "Bagels",
+                    "name": "L'Oriental Bagel",
+                    "ingredients": "***",
+                    "calories": 0,
+                    "proteins": 0,
+                    "price": 5000,
+                    "image": "assets/images/bagel.Oriental.webp"
+                },
+				{
+                    "id": 49,
+					"category": "Bagels",
+                    "name": "Le Cheese Healthy Bagel",
+                    "ingredients": "Viande hachée faible en matières grasses / Emmental / Avocat / Tomate / Confit d’oignons / Cream cheese / Cornichons / Laitue / Moutarde Miel / Sauce blanche light",
+                    "calories": 0,
+                    "proteins": 0,
+                    "price": 9500,
+                    "image": "assets/images/Bagel-cheese-Bagel-Healthy.webp"
+                },
+				{
+                    "id": 51,
                     "category": "Toasts",
                     "name": "Toast Avocat Œuf Poché",
                     "ingredients": "Pain de seigle, avocat, œuf poché, graines de sésame, piment d'Espelette",
                     "calories": 0,
                     "proteins":0,
                     "price": 6500,
-                    "image": "assets/images/Toast-Avocat-oeuf.jpg"
+                    "image": "assets/images/Toast-Avocat-oeuf.webp"
                 },
 
 				{
-                    "id": 51,
+                    "id": 61,
 					"category": "Desserts",
                     "name": "Boost-Tella",
                     "ingredients": "Choco sans Sucre, Banane, Fruits, Granola",
                     "calories": 236,
                     "proteins": 24.2,
                     "price": 7000,
-                    "image": "assets/images/Dessert-Bagel-Boost-Tella.jpg"
+                    "image": "assets/images/Dessert-Bagel-Boost-Tella.webp"
                 },
 								{
-                    "id": 52,
+                    "id": 62,
 					"category": "Desserts",
                     "name": "Peanut",
                     "ingredients": "Beurre de Cacahuette sans Sucre, Fruits, Granola",
                     "calories": 236,
                     "proteins": 24.2,
                     "price": 6000,
-                    "image": "assets/images/Dessert-Peanut.jpg"
+                    "image": "assets/images/Dessert-Peanut.webp"
                 },
 								{
-                    "id": 53,
+                    "id": 63,
 					"category": "Desserts",
                     "name": "yaourt Granola",
                     "ingredients": "Yaourt, Fruits, Granola",
                     "calories": 236,
                     "proteins": 24.2,
                     "price": 6000,
-                    "image": "assets/images/Dessert-Yaourt.jpg"
+                    "image": "assets/images/Dessert-Yaourt.webp"
                 },
 								{
-                    "id": 54,
+                    "id": 64,
 					"category": "Desserts",
                     "name": "Brownies Healthy",
                     "ingredients": " ",
                     "calories": 236,
                     "proteins": 24.2,
                     "price": 3500,
-                    "image": "assets/images/Dessert-Brownies.jpg"
+                    "image": "assets/images/Dessert-Brownies.webp"
                 },
   {
-    "id": 60,
+    "id": 160,
 	"category": "Boissons",
     "name": "Coca-Cola",
     "type": "Soda Classique",
     "volume": "33cl",
     "price": 1000,
-    "image": "assets/images/Boissons-coca.jpg"
+    "image": "assets/images/Boissons-coca.webp"
   },
   {
-    "id": 61,
+    "id": 161,
 	"category": "Boissons",
     "name": "Coca-Cola Zero",
     "type": "Soda Sans Sucre",
     "volume": "33cl",
     "price": 1000,
-    "image": "assets/images/Boissons-coca-zero.jpg"
+    "image": "assets/images/Boissons-coca-ZERO.webp"
   },
   {
-    "id": 62,
+    "id": 162,
 	"category": "Boissons",
     "name": "Fanta",
     "type": "Soda Fruité (Orange)",
     "volume": "33cl",
     "price": 1000,
-    "image": "assets/images/Boissons-fanta.jpg"
+    "image": "assets/images/Boissons-fanta.webp"
   },
   {
-    "id": 63,
+    "id": 163,
 	"category": "Boissons",
     "name": "Sprite",
     "type": "Soda Citron-Lime",
     "volume": "33cl",
     "price": 1000,
-    "image": "assets/images/Boissons-sprite.jpg"
+    "image": "assets/images/boissons-sprite.webp"
   },
   {
-    "id": 64,
+    "id": 164,
 	"category": "Boissons",
     "name": "Perrier",
     "type": "Eau gazeuse naturelle",
     "volume": "33cl",
     "price": 2000,
-    "image": "assets/images/Boissons-perrier.jpg"
+    "image": "assets/images/Boissons-Perrier.webp"
   },
   {
-    "id": 65,
+    "id": 165,
 	"category": "Boissons",
     "name": "Red Bull",
     "type": "Boisson Énergisante",
     "volume": "25cl",
     "price": 2000,
-    "image": "assets/images/Boissons-redbull.jpg"
+    "image": "assets/images/Boissons-RedBull.webp"
   },
   {
-    "id": 66,
+    "id": 166,
 	"category": "Boissons",
     "name": "Ice Tea Pêche",
     "type": "Thé glacé",
     "volume": "33cl",
     "price": 2000,
-    "image": "assets/images/Boissons-icetea.jpg"
+    "image": "assets/images/Boissons-Icetea.webp"
   },
   {
-    "id": 67,
+    "id": 167,
 	"category": "Boissons",
     "name": "Ice Tea Zéro",
     "type": "Thé glacé Sans Sucre",
     "volume": "33cl",
     "price": 2000,
-    "image": "assets/images/boissons-icetea-zero.jpg"
+    "image": "assets/images/Boissons-Icetea-ZERO.webp"
   },
   {
-    "id": 68,
+    "id": 168,
 	"category": "Boissons",
     "name": "Oasis",
     "type": "Boisson aux fruits",
     "volume": "33cl",
     "price": 2000,
-    "image": "assets/images/Boissons-oasis.jpg"
+    "image": "assets/images/Boissons-oasis.webp"
   },
   {
-    "id": 69,
+    "id": 169,
 	"category": "Boissons",
     "name": "Cody's",
     "type": "Cocktail sans alcool",
     "volume": "27.5cl",
     "price": 1500,
-    "image": "assets/images/Boissons-codys.jpg"
+    "image": "assets/images/Boissons-codys.webp"
   },
   {
-    "id": 70,
+    "id": 170,
 	"category": "Boissons",
     "name": "Bavaria 0%",
     "type": "Bière sans alcool",
     "volume": "33cl",
     "price": 2000,
-    "image": "assets/images/Boissons-bavaria-pomme.jpeg"
+    "image": "assets/images/Boissons-bavaria-pomme.webp"
   },
   {
-    "id": 71,
+    "id": 171,
 	"category": "Boissons",
     "name": "Schweppes Agrumes",
     "type": "Boisson pétillante",
     "volume": "33cl",
     "price": 1000,
-    "image": "assets/images/Boissons-schweppes.jpg"
+    "image": "assets/images/Boissons-schweppes.webp"
   }
   ]
 }
@@ -595,7 +787,7 @@
             <div class="contact-info">
                 <p><i class="fas fa-phone"></i> <a href="tel:+2250708305100">07 08 30 51 00</a></p>
                 <p><i class="fas fa-map-marker-alt"></i> Rue Angeline Nadie <a href="https://www.google.com/maps?q=5.2979405,-3.988237" target="_blank" class="map-link"><i class="fas fa-map-marked-alt"></i></a></p>
-                <p><i class="far fa-clock"></i> Mar-Dim: 11h-23h</p>
+                <p><i class="far fa-clock"></i> Lun-Dim: 11h-23h</p>
             </div>
         </div>
 
@@ -612,8 +804,13 @@
             <div class="social-links">
                 <a href="https://www.instagram.com/coupdefood.healthy" target="_blank" class="social-icon" title="Instagram">
                     <i class="fab fa-instagram"></i>
-                </a>
-                <a href="#" class="social-icon disabled" title="Bientôt sur TikTok">
+                <!-- Facebook -->
+			<a href="https://www.facebook.com/yourpage" target="_blank" class="social-icon facebook" title="Facebook" rel="noopener noreferrer">
+				<i class="fab fa-facebook-f" aria-hidden="true"></i>
+				<span class="sr-only">Facebook</span>
+			</a>
+			     <!-- Tiktok -->
+                <a href="https://www.tiktok.com/@coup_de_food0" target="_blank" class="social-icon" title="TikTok">
                     <i class="fab fa-tiktok"></i>
                 </a>
                 <a href="https://wa.me/2250708305100" target="_blank" class="social-icon whatsapp" title="WhatsApp">
@@ -624,7 +821,7 @@
     </div>
     
     <div class="footer-bottom">
-        <p>&copy; 2025 Coup De Food. Tous droits réservés.</p>
+        <p>&copy; 2026 Coup De Food. Tous droits réservés.</p>
     </div>
 </footer>
 
@@ -775,8 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-    <!-- SheetJS for Excel import/export -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- SheetJS for Excel import/export — chargé dynamiquement après déverrouillage admin (voir scripts.js) -->
     
     <!-- Font Loading Optimization -->
     <script>
@@ -940,7 +1136,6 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    <!-- Search Functionality -->
-    <script src="assets/search.js"></script>
+    <!-- Search Functionality (intégrée dans scripts.js) -->
 </body>
 </html>
