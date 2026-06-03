@@ -355,6 +355,10 @@ const cartNotification = document.getElementById('cartNotification');
 // const topDishes = document.getElementById('topDishes');
 // const topCategories = document.getElementById('topCategories');
 
+// Admin modal globals (déclarées ici, assignées dans initAdmin)
+let adminModal, adminLock, adminContent, adminCode, adminUnlock, adminError;
+let adminPanelMenu, adminPanelStats, adminDishList, adminCategoryFilter, closeAdminModal;
+
 // Admin Modal elements - these will be initialized in initAdmin
 const btnAddDish = document.getElementById('btnAddDish');
 const btnImport = document.getElementById('btnImport');
@@ -427,20 +431,20 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Charger les favoris depuis le localStorage
     loadFavorites();
+
+    // Initialiser le carrousel après le rendu du menu
+    initCarousel();
 });
 
 // Enregistrement du Service Worker (PWA)
-// -_- Bug: No check if the page is served over HTTPS (required for service workers in production)
-// -_- Bug: No offline handling or cache versioning strategy mentioned
 if ('serviceWorker' in navigator) {
-    // -_- Bug: Using 'load' event might delay service worker registration
     window.addEventListener('load', async () => {
         // Ne pas essayer d'enregistrer le Service Worker en développement local (file://)
         if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
             try {
-                // Essayer d'abord avec le chemin relatif à la racine
-                const reg = await navigator.serviceWorker.register('/sw.js', { 
-                    scope: '/',
+                // Chemins relatifs (compatibles racine et sous-dossier GitHub Pages)
+                const swUrl = new URL('sw.js', document.baseURI).toString();
+                const reg = await navigator.serviceWorker.register(swUrl, {
                     updateViaCache: 'none'  // Toujours récupérer la dernière version du SW
                 });
 
@@ -475,29 +479,29 @@ if ('serviceWorker' in navigator) {
 
 // Charger les données du menu
 function loadMenuData() {
-    // -_- Bug: No loading state or error handling for the UI
-    // -_- Suggestion: Add a loading indicator
-    
-    // -_- Bug: No validation of the structure of menuDataCustom
+    // Tenter d'abord les données personnalisées (admin)
     const custom = localStorage.getItem('menuDataCustom');
     if (custom) {
         try {
-            menuData = JSON.parse(custom);
-            // -_- Suggestion: Validate menuData structure before using
+            const parsed = JSON.parse(custom);
+            if (parsed && Array.isArray(parsed.dishes) && Array.isArray(parsed.categories)) {
+                menuData = parsed;
+            } else {
+                console.warn('menuDataCustom invalide (structure), fallback DOM');
+                localStorage.removeItem('menuDataCustom');
+            }
         } catch (e) {
-            console.warn('menuDataCustom invalide, fallback DOM:', e);
-            // -_- Bug: Should clear invalid data from localStorage
-            // localStorage.removeItem('menuDataCustom');
+            console.warn('menuDataCustom invalide (JSON), fallback DOM:', e);
+            localStorage.removeItem('menuDataCustom');
         }
     }
-    
-    // -_- Bug: Should validate menuData structure more thoroughly
+
+    // Fallback : lire le JSON inline dans le HTML
     if (!menuData || !Array.isArray(menuData.dishes) || !Array.isArray(menuData.categories)) {
         const menuDataElement = document.getElementById('menuData');
         if (menuDataElement && menuDataElement.textContent) {
             try {
                 menuData = JSON.parse(menuDataElement.textContent);
-                // -_- Suggestion: Validate the parsed data
             } catch (e) {
                 console.error('Failed to parse menuData from DOM:', e);
                 menuData = { categories: [], dishes: [] };
@@ -507,14 +511,12 @@ function loadMenuData() {
             menuData = { categories: [], dishes: [] };
         }
     }
-    
-    // Initialize menu rendering
+
     try {
         renderCategories();
         renderAllDishes();
     } catch (error) {
         console.error('Error initializing menu:', error);
-        // -_- Suggestion: Show error state to user
     }
 }
 
@@ -537,9 +539,13 @@ function setTheme(theme) {
     if (theme === 'dark') {
         moonIcon.style.display = 'none';
         sunIcon.style.display = 'inline-block';
+        themeToggle.setAttribute('aria-pressed', 'true');
+        themeToggle.setAttribute('aria-label', 'Passer en thème clair');
     } else {
         moonIcon.style.display = 'inline-block';
         sunIcon.style.display = 'none';
+        themeToggle.setAttribute('aria-pressed', 'false');
+        themeToggle.setAttribute('aria-label', 'Passer en thème sombre');
     }
 }
 
@@ -647,6 +653,12 @@ function initEventListeners() {
     }
     
     if (searchClear) manageEventListener(searchClear, 'click', clearSearch);
+
+    // Bouton de partage du menu (Web Share API + fallback copie)
+    const shareToggle = document.getElementById('shareToggle');
+    if (shareToggle) {
+        manageEventListener(shareToggle, 'click', handleShareMenu);
+    }
     
     if (searchWrapper) {
         manageEventListener(searchWrapper, 'click', (e) => {
@@ -800,10 +812,19 @@ function createDishCard(dish) {
         card.appendChild(popularBadge);
     }
     
-    // Create and add dish image
+    // Create and add dish image (lazy + fallback si chemin cassé)
     const dishImage = createElement('img', 'dish-image');
     dishImage.src = dish.image;
     dishImage.alt = dish.name;
+    dishImage.loading = 'lazy';
+    dishImage.decoding = 'async';
+    dishImage.onerror = function() {
+        // Fallback transparent + classe pour styliser
+        this.onerror = null;
+        this.classList.add('dish-image--missing');
+        this.alt = `${dish.name} (image indisponible)`;
+        this.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300"><rect width="400" height="300" fill="%23f0f0f0"/><text x="50%25" y="50%25" font-family="sans-serif" font-size="18" fill="%23999" text-anchor="middle" dy=".3em">Image indisponible</text></svg>';
+    };
     card.appendChild(dishImage);
     
     // Create dish info container
@@ -881,14 +902,21 @@ function renderDishes(dishes) {
         return;
     }
     
-    // Create and append dish cards
+    // Create and append dish cards (les listeners sont déjà attachés dans createDishCard)
     dishes.forEach(dish => {
         const card = createDishCard(dish);
         menuContainer.appendChild(card);
     });
-    
-    // Add event listeners to the new dish cards
-    addDishEventListeners();
+
+    // Effets hover/sélection sur les cartes (un seul listener par carte neuve)
+    menuContainer.querySelectorAll('.dish-card').forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.closest('button')) {
+                menuContainer.querySelectorAll('.dish-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+            }
+        });
+    });
 }
 
 // Aller à la section menu
@@ -939,37 +967,9 @@ function clearSearch() {
     closeSearch();
 }
 
-// Ajouter les écouteurs d'événements aux cartes de plats
-function addDishEventListeners() {
-    // Boutons favoris
-    document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', toggleFavorite);
-    });
-    
-    // Boutons ajouter au panier
-    document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
-        btn.addEventListener('click', addToCart);
-    });
-    
-    // Effets hover sur les cartes
-    document.querySelectorAll('.dish-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.classList.add('hover');
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.classList.remove('hover');
-        });
-        
-        card.addEventListener('click', (e) => {
-            // Ne pas sélectionner si on clique sur un bouton à l'intérieur
-            if (!e.target.closest('button')) {
-                document.querySelectorAll('.dish-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-            }
-        });
-    });
-}
+// Ajouter les écouteurs d'événements aux cartes de plats (DEPRECATED - listeners attachés directement dans createDishCard)
+// Conservé pour compatibilité, ne fait plus rien afin d'éviter la duplication
+function addDishEventListeners() { /* no-op */ }
 
 // Créer un cœur flottant
 function createFloatingHeart(x, y) {
@@ -1080,6 +1080,60 @@ function showCartNotification() {
     }, 3000);
 }
 
+// Afficher un toast générique (partage, copie, etc.)
+function showToast(message, duration = 2500) {
+    const toast = document.getElementById('toastNotification');
+    const text = document.getElementById('toastNotificationText');
+    if (!toast) return;
+    if (text && message) text.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => toast.classList.remove('show'), duration);
+}
+
+// Partager le menu (Web Share API natif sur mobile, fallback clipboard sur desktop)
+async function handleShareMenu() {
+    const shareData = {
+        title: 'Coup De Food — Restaurant Healthy Abidjan',
+        text: 'Découvrez le menu de Coup De Food, restaurant healthy à Abidjan 🌿',
+        url: window.location.href.split('#')[0]
+    };
+
+    // 1. Web Share API (mobile, navigateurs modernes)
+    if (navigator.share) {
+        try {
+            await navigator.share(shareData);
+            return;
+        } catch (err) {
+            // L'utilisateur a annulé : ne rien faire
+            if (err && err.name === 'AbortError') return;
+            console.warn('Web Share a échoué, fallback copie:', err);
+        }
+    }
+
+    // 2. Fallback : copier le lien dans le presse-papiers
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareData.url);
+        } else {
+            // 3. Fallback ultime (anciens navigateurs) : execCommand
+            const ta = document.createElement('textarea');
+            ta.value = shareData.url;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        }
+        showToast('Lien copié dans le presse-papiers ✨');
+    } catch (err) {
+        console.error('Copie impossible:', err);
+        showToast('Impossible de copier — voici le lien : ' + shareData.url, 5000);
+    }
+}
+
 // Sauvegarder le panier dans le localStorage
 function saveCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -1087,10 +1141,17 @@ function saveCart() {
 
 // Charger le panier depuis le localStorage
 function loadCart() {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-        updateCartCount();
+    try {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            const parsed = JSON.parse(savedCart);
+            cart = Array.isArray(parsed) ? parsed : [];
+            updateCartCount();
+        }
+    } catch (e) {
+        console.warn('Panier corrompu, réinitialisation:', e);
+        cart = [];
+        try { localStorage.removeItem('cart'); } catch (_) {}
     }
 }
 
@@ -1101,9 +1162,16 @@ function saveFavorites() {
 
 // Charger les favoris depuis le localStorage
 function loadFavorites() {
-    const savedFavorites = localStorage.getItem('favorites');
-    if (savedFavorites) {
-        favorites = JSON.parse(savedFavorites);
+    try {
+        const savedFavorites = localStorage.getItem('favorites');
+        if (savedFavorites) {
+            const parsed = JSON.parse(savedFavorites);
+            favorites = Array.isArray(parsed) ? parsed : [];
+        }
+    } catch (e) {
+        console.warn('Favoris corrompus, réinitialisation:', e);
+        favorites = [];
+        try { localStorage.removeItem('favorites'); } catch (_) {}
     }
 }
 
@@ -1114,6 +1182,7 @@ function updateCartCount() {
     // Mettre à jour le compteur du panier flottant
     if (cartCount) {
         cartCount.textContent = count;
+        cartCount.setAttribute('aria-label', `${count} article${count > 1 ? 's' : ''} dans le panier`);
         
         // Afficher/masquer le compteur selon le contenu
         if (count > 0) {
@@ -1127,8 +1196,10 @@ function updateCartCount() {
     if (cartIcon) {
         if (count > 0) {
             cartIcon.classList.add('has-items');
+            cartIcon.setAttribute('aria-label', `Voir le panier (${count} article${count > 1 ? 's' : ''})`);
         } else {
             cartIcon.classList.remove('has-items');
+            cartIcon.setAttribute('aria-label', 'Voir le panier (vide)');
         }
     }
 }
@@ -1362,7 +1433,7 @@ function initAdmin() {
                     
                     if (tab === 'menu') {
                         if (adminPanelMenu) adminPanelMenu.style.display = 'block';
-                        if (adminPanelStats) adminPanelMenu.style.display = 'none';
+                        if (adminPanelStats) adminPanelStats.style.display = 'none';
                     } else {
                         if (adminPanelMenu) adminPanelMenu.style.display = 'none';
                         if (adminPanelStats) {
@@ -1592,12 +1663,33 @@ function unlockAdmin() {
         if (adminError) adminError.style.display = 'none';
         if (adminLock) adminLock.style.display = 'none';
         if (adminContent) adminContent.style.display = 'block';
+        // Charger SheetJS uniquement après déverrouillage (économie ~900 ko pour les visiteurs)
+        loadXlsxIfNeeded();
         populateAdminCategories();
         renderAdminDishList();
         updateStatsUI();
     } else {
         if (adminError) adminError.style.display = 'block';
     }
+}
+
+// Lazy-load de SheetJS — n'expose pas la lib aux visiteurs normaux
+let _xlsxLoadingPromise = null;
+function loadXlsxIfNeeded() {
+    if (window.XLSX) return Promise.resolve(window.XLSX);
+    if (_xlsxLoadingPromise) return _xlsxLoadingPromise;
+    _xlsxLoadingPromise = new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+        s.async = true;
+        s.onload = () => resolve(window.XLSX);
+        s.onerror = () => {
+            _xlsxLoadingPromise = null;
+            reject(new Error('Impossible de charger SheetJS'));
+        };
+        document.head.appendChild(s);
+    });
+    return _xlsxLoadingPromise;
 }
 
 function populateAdminCategories() {
@@ -1825,6 +1917,13 @@ function handleSaveDish(e) {
 function handleExcelImport(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
+    loadXlsxIfNeeded().then(() => doExcelImport(file, e.target)).catch((err) => {
+        console.error(err);
+        alert('Bibliothèque Excel non chargée. Vérifiez votre connexion.');
+    });
+}
+
+function doExcelImport(file, inputEl) {
     const reader = new FileReader();
     reader.onload = (evt) => {
         try {
@@ -1868,7 +1967,7 @@ function handleExcelImport(e) {
             populateAdminCategories();
             renderAdminDishList();
             renderAllDishes();
-            excelImport.value = '';
+            if (inputEl) inputEl.value = '';
         } catch (err) {
             console.error('Import Excel échoué:', err);
             alert('Échec import Excel');
@@ -1878,10 +1977,13 @@ function handleExcelImport(e) {
 }
 
 function handleExcelExport() {
-    if (!window.XLSX) {
-        alert('Bibliothèque Excel non chargée');
-        return;
-    }
+    loadXlsxIfNeeded().then(() => doExcelExport()).catch((err) => {
+        console.error(err);
+        alert('Bibliothèque Excel non chargée. Vérifiez votre connexion.');
+    });
+}
+
+function doExcelExport() {
     const header = ['Categorie','Nom','Ingrédients','Calories','Protéines (g)','Prix','Image'];
     const rows = [header];
     (menuData.dishes || []).forEach(d => {
@@ -1942,9 +2044,22 @@ function resetMenuData() {
 }
 
 // ====== Statistiques Commandes ======
+function safeParseStats() {
+    try {
+        const raw = localStorage.getItem('orderStats');
+        const parsed = raw ? JSON.parse(raw) : null;
+        if (parsed && typeof parsed === 'object' && parsed.dishes && parsed.categories) {
+            return parsed;
+        }
+    } catch (e) {
+        console.warn('orderStats corrompu, réinitialisation:', e);
+    }
+    return { dishes: {}, categories: {} };
+}
+
 function recordOrder(cartItems) {
     if (!Array.isArray(cartItems) || !cartItems.length) return;
-    const stats = JSON.parse(localStorage.getItem('orderStats') || '{"dishes":{},"categories":{}}');
+    const stats = safeParseStats();
     cartItems.forEach(it => {
         const dishId = it.id;
         const qty = it.quantity || 1;
@@ -1952,11 +2067,15 @@ function recordOrder(cartItems) {
         const cat = it.category || 'Autres';
         stats.categories[cat] = (stats.categories[cat] || 0) + qty;
     });
-    localStorage.setItem('orderStats', JSON.stringify(stats));
+    try {
+        localStorage.setItem('orderStats', JSON.stringify(stats));
+    } catch (e) {
+        console.warn('Impossible de sauvegarder orderStats:', e);
+    }
 }
 
 function updateStatsUI() {
-    const stats = JSON.parse(localStorage.getItem('orderStats') || '{"dishes":{},"categories":{}}');
+    const stats = safeParseStats();
     if (topDishesList) {
         topDishesList.innerHTML = '';
         const entries = Object.entries(stats.dishes).sort((a,b) => b[1]-a[1]).slice(0, 10);
@@ -2066,30 +2185,12 @@ function initializeAdminComponents(retryCount = 0, maxRetries = 3) {
 
 /**
  * Initialize the application when the DOM is fully loaded
+ * (Note: les init principales sont déjà faites via DOMContentLoaded en haut du fichier.
+ *  Cette fonction est conservée pour compatibilité mais n'effectue plus de double-init.)
  */
 function initializeApplication() {
-    try {
-        console.log('Initializing application...');
-        
-        // Initialize core functionality
-        loadCart();
-        loadFavorites();
-        updateCartCount();
-        renderCartItems();
-        
-        // Initialize admin components with error handling
-        initializeAdminComponents().then(adminInitialized => {
-            if (!adminInitialized) {
-                console.warn('Admin components failed to initialize. Some features may not be available.');
-            }
-        }).catch(error => {
-            console.error('Error during admin initialization:', error);
-        });
-        
-        console.log('Application initialization complete');
-    } catch (error) {
-        console.error('Error during application initialization:', error);
-    }
+    // Volontairement vide : les inits sont gérées par le listener DOMContentLoaded principal
+    // afin d'éviter les doublons d'écouteurs et de rendus.
 }
 
 // ====== MODERN CAROUSEL ======
@@ -2448,21 +2549,15 @@ class ModernCarousel {
 let modernCarousel;
 
 function initCarousel() {
-    modernCarousel = new ModernCarousel();
+    if (!modernCarousel) {
+        modernCarousel = new ModernCarousel();
+    }
 }
 
-// Start initialization when DOM is ready
+// Pour les cas où ce script serait chargé après DOMContentLoaded (ex: cache),
+// déclencher l'init si nécessaire. Le listener principal en haut couvre le cas normal.
 if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    // If the document is already loaded, initialize immediately
-    setTimeout(initializeApplication, 1);
-    setTimeout(initCarousel, 1000); // Slight delay to ensure menu data is loaded
-} else {
-    // Otherwise, wait for DOMContentLoaded
-    document.addEventListener('DOMContentLoaded', () => {
-        initializeApplication();
-        // Initialize carousel after a short delay to ensure menu data is loaded
-        setTimeout(initCarousel, 1000);
-    });
+    if (!modernCarousel) setTimeout(initCarousel, 0);
 }
 
 // Fonction inutilisée
