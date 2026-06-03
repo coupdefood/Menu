@@ -1,16 +1,21 @@
 /* Coup de Food Service Worker (assets) */
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = `cdf-cache-${CACHE_VERSION}`;
 
-// Precache core local assets (same-origin only)
-const CORE_ASSETS = [
+// Base scope of the SW (works whether deployed at root or in a sub-folder like /CoupDeFood/)
+const SCOPE = self.registration ? self.registration.scope : self.location.href.replace(/sw\.js.*$/, '');
+
+// Precache core local assets (resolved against SCOPE so it works on GitHub Pages sub-folders)
+const CORE_PATHS = [
   './',
-  '/index.html',
-  '/assets/styles.css',
-  '/assets/animations.css',
-  '/assets/scripts.js',
-  '/assets/images/logo.png'
+  'index.html',
+  'assets/styles.css',
+  'assets/animations.css',
+  'assets/scripts.js',
+  'assets/images/logo.png'
 ];
+
+const CORE_ASSETS = CORE_PATHS.map((p) => new URL(p, SCOPE).toString());
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
@@ -52,7 +57,7 @@ self.addEventListener('fetch', (event) => {
         return fresh;
       } catch (e) {
         const cache = await caches.open(CACHE_NAME);
-        const cachedIndex = await cache.match('/index.html');
+        const cachedIndex = await cache.match(new URL('index.html', SCOPE).toString());
         const cachedReq = await cache.match(req);
         return cachedIndex || cachedReq || new Response('Vous êtes hors ligne.', {
           status: 503,
